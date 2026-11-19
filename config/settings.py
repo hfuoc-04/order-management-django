@@ -113,6 +113,10 @@ USE_I18N = True
 # Database lưu thời gian dạng UTC, Django tự đổi sang TIME_ZONE khi hiển thị/truy vấn.
 USE_TZ = True
 
+# Định dạng tiếng Việt của Django có dấu "." ngăn hàng nghìn nhưng không khai báo số chữ số
+# mỗi nhóm, nên phải đặt ở đây để báo cáo hiện 45.000 thay vì 45000.
+NUMBER_GROUPING = 3
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
