@@ -92,6 +92,11 @@ class Order(models.Model):
     def __str__(self):
         return f"Đơn #{self.pk}"
 
+    @property
+    def is_editable(self):
+        """Chỉ đơn ở trạng thái Mới mới được sửa. Model và Admin dùng chung quy tắc này."""
+        return self.status == self.Status.NEW
+
     # ---------- Tính toán ----------
 
     def calculate_total(self):
@@ -136,7 +141,7 @@ class Order(models.Model):
         other_changed = [name for name in changed if name != "status"]
 
         # Quy tắc 1: chỉ đơn còn ở trạng thái Mới mới được sửa thông tin.
-        if other_changed and original.status != self.Status.NEW:
+        if other_changed and not original.is_editable:
             raise ValidationError(
                 f"Đơn đang ở trạng thái “{original.get_status_display()}”, không thể sửa nữa."
             )
