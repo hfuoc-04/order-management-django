@@ -1,0 +1,51 @@
+{% extends "admin/base_site.html" %}
+{# Kế thừa giao diện Admin: cùng thanh tiêu đề, CSS, nút đăng xuất. #}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Trang chủ</a>
+  &rsaquo; <a href="{% url 'admin:orders_order_changelist' %}">Đơn hàng</a>
+  &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <form method="get">
+    {% if form.errors %}<p class="errornote">Bộ lọc chưa hợp lệ, vui lòng kiểm tra lại.</p>{% endif %}
+    {{ form.non_field_errors }}
+    {{ form.date_from.label_tag }} {{ form.date_from }}
+    {{ form.date_to.label_tag }} {{ form.date_to }}
+    <input type="submit" value="Lọc">
+    <a href="{% url 'orders:daily_revenue' %}">Bỏ lọc</a>
+    {{ form.date_from.errors }}
+    {{ form.date_to.errors }}
+  </form>
+
+  <p class="help">Chỉ tính đơn “Đã giao”, gom theo ngày tạo đơn (giờ Việt Nam).</p>
+
+  {% if rows %}
+    <table>
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th style="text-align: right">Số đơn</th>
+          <th style="text-align: right">Tổng thành tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.day|date:"d/m/Y" }}</td>
+            <td style="text-align: right">{{ row.order_count }}</td>
+            {# "-2g": bỏ phần thập phân nếu bằng 0, có dấu phân cách hàng nghìn. #}
+            <td style="text-align: right">{{ row.revenue|floatformat:"-2g" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Chưa có doanh thu.</p>
+  {% endif %}
+</div>
+{% endblock %}

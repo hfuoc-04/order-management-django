@@ -1,0 +1,7 @@
+{% extends "admin/change_list.html" %}
+{# Thêm nút "Báo cáo doanh thu" cạnh nút "Thêm Đơn hàng" trên trang danh sách đơn. #}
+
+{% block object-tools-items %}
+  <li><a href="{% url 'orders:daily_revenue' %}">Báo cáo doanh thu</a></li>
+  {{ block.super }}
+{% endblock %}
